@@ -10,4 +10,4 @@ We use [awk](https://en.wikipedia.org/wiki/AWK) to extract and filter the gene p
 
 Input:
 * [Tcruzi_CLBrener_Paralogy_TriTrypDB28](https://github.com/vitorlimac2/paralogQuantY/tree/master/metafiles): Gene paralogy tuples;
-* \*.filtered.gtf.counts.txt: GTF counts created by gemtools;
+* \*.filtered.gtf.counts.txt: GTF weighted counts created by gemtools;

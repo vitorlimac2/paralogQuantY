@@ -3,7 +3,6 @@
 Description.
 
 ## Table of Contents
-=================
 
  * [Getting Started](#getting-started)
     * [Genome and transcriptome information](#genome-and-transcriptome-information)

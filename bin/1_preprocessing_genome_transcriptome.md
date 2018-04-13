@@ -8,7 +8,7 @@ This step is required to remove meta-information from the FASTA headers and merg
 ```
 ## Prepare transcriptome annotation
 
-### Convert to GTF
+### Convert to GTF and merge
 
 ```
 ~$ gffread TriTrypDB-28_TcruziCLBrener.gff -T -o TriTrypDB-28_TcruziCLBrener.gtf

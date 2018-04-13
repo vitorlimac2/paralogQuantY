@@ -42,6 +42,6 @@ java -jar paralogGroupQuant.jar --group -i Tcruzi_CLBrener_Paralogy_TriTrypDB28 
 
 * Lib1.filtered.gtf.counts.WithParG.txt: tab-separated GTF weighted count file with the paralog group (PG) ID, list of counted genes (comma-separated) and sum the counts of the same PG. Genes that have not been assigned to any group do not have their counts changed;
 ```
-java -jar paralogGroupQuant.jar --sum -i Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups -c Lib1.filtered.gtf.counts.txt --gc Lib1.filtered.gtf.counts.WithParG.txt
+java -jar paralogGroupQuant.jar --sum -i Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups -c Lib1.filtered.gtf.counts.txt > Lib1.filtered.gtf.counts.WithParG.txt
 ```
 

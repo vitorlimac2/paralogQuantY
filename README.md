@@ -40,6 +40,11 @@ This command-line performs:
 * Filter mappings
 * Assign reads to the transcriptome and create GTF counts
 
+### Visualization, normalization and differential gene expression
+
+Differential expression analysis was performed similarly to the literature (Anders et al, 2013) using the R/Bioconductor package DESeq2 (Love et al, 2014). Genes/OG with < 1 count were filtered out of the raw count table. Next, fractional counts were rounded by the R function “round” since DESeq2 handles only integer counts. Genes/groups were considered differentially expressed when they had a log2 fold-change greater or equals to ±1.5 and False Discovery Rate (FDR) was less or equals to 0.05.
+
+For more details, scripts and command-lines, see [bin](https://github.com/vitorlimac2/paralogQuantY/tree/master/bin) folder.
 
 ## Authors
 

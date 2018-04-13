@@ -5,16 +5,16 @@ Description.
 ## Table of Contents
 =================
 
-      * [Getting Started](#getting-started)
-         * [Genome and transcriptome information](#genome-and-transcriptome-information)
-            * [Genome Assembly](#genome-assembly)
-            * [Transcriptome annotation](#transcriptome-annotation)
-            * [Paralogy information](#paralogy-information)
-         * [Mapping and quantification](#mapping-and-quantification)
-         * [Visualization, normalization and differential gene expression](#visualization-normalization-and-differential-gene-expression)
-      * [Authors](#authors)
-      * [References](#references)
-      * [Links](#links)
+ * [Getting Started](#getting-started)
+    * [Genome and transcriptome information](#genome-and-transcriptome-information)
+       * [Genome Assembly](#genome-assembly)
+       * [Transcriptome annotation](#transcriptome-annotation)
+       * [Paralogy information](#paralogy-information)
+    * [Mapping and quantification](#mapping-and-quantification)
+    * [Visualization, normalization and differential gene expression](#visualization-normalization-and-differential-gene-expression)
+ * [Authors](#authors)
+ * [References](#references)
+ * [Links](#links)
 
 ## Getting Started
 

@@ -6,6 +6,12 @@ We used FastQC (Andrews, 2010) to check the raw read quality, GC content, duplic
 
 Command-line example:
 
+**Input**
+* Illumina read sequence files: Epi-Y-1_R1.fastq and Epi-Y-1_R2.fastq
+
+**Output**
+* Epi-Y-1_R1_val_1.fq and Epi-Y-1_R2_val_2.fq
+
 ```
 ~$ trim_galore --path_to_cutadapt ~/.local/bin/cutadapt --paired --max_n 5 --stringency 12 -q 20 -e 0.1 --length 30 Epi-Y-1_R1.fastq Epi-Y-1_R2.fastq
 ```

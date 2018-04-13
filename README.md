@@ -2,6 +2,21 @@
 
 Description.
 
+Table of Contents
+=================
+
+   * [Project Title](#project-title)
+      * [Getting Started](#getting-started)
+         * [Genome and transcriptome information](#genome-and-transcriptome-information)
+            * [Genome Assembly](#genome-assembly)
+            * [Transcriptome annotation](#transcriptome-annotation)
+            * [Paralogy information](#paralogy-information)
+         * [Mapping and quantification](#mapping-and-quantification)
+         * [Visualization, normalization and differential gene expression](#visualization-normalization-and-differential-gene-expression)
+      * [Authors](#authors)
+      * [References](#references)
+      * [Links](#links)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.

@@ -2,7 +2,7 @@
 
 Description.
 
-Table of Contents
+##Table of Contents
 =================
 
    * [Project Title](#project-title)

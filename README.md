@@ -5,7 +5,6 @@ Description.
 ## Table of Contents
 =================
 
-   * [Project Title](#project-title)
       * [Getting Started](#getting-started)
          * [Genome and transcriptome information](#genome-and-transcriptome-information)
             * [Genome Assembly](#genome-assembly)

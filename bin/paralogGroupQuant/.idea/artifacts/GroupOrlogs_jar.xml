@@ -2,7 +2,7 @@
   <artifact type="jar" name="GroupOrlogs:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/GroupOrlogs_jar</output-path>
     <root id="archive" name="GroupOrlogs.jar">
-      <element id="module-output" name="GroupOrlogs" />
+      <element id="module-output" name="paralogGroupQuant" />
     </root>
   </artifact>
 </component>

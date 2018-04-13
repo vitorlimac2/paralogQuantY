@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GroupOrlogs.iml" filepath="$PROJECT_DIR$/GroupOrlogs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/paralogGroupQuant.iml" filepath="$PROJECT_DIR$/paralogGroupQuant.iml" />
     </modules>
   </component>
 </project>

@@ -19,11 +19,6 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException, ParseException {
 	// write your code here
 
-        // read line
-        // check if $1 or $2 is element of a list l1;
-        /// if yes; add $1 and $2 to
-        /// if no; create new list and add $1,$2
-
         try {
             if (!validadeOptions(args)) {
                 help();
@@ -32,6 +27,17 @@ public class Main {
         }catch(ParseException exp){
             System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
         }
+
+        if(isGroup()){
+            group();
+        }else if(isSum()){
+            sumCount();
+        }
+
+        // read line
+        // check if $1 or $2 is element of a list l1;
+        /// if yes; add $1 and $2 to
+        /// if no; create new list and add $1,$2
 
         /*
         String filename = args[0];
@@ -51,23 +57,17 @@ public class Main {
 
         for(Map.Entry<String,List<String>> group: ortologGroups.entrySet()){
             System.out.println("@GROUP_SIZE\t" + "og"+group.getValue().size());
-
             String sedCommand="";
-
             System.out.println("@FUNCTION\t" + "og"+group.getKey()+"\t"+ ortologFunctions.get(group.getKey()));
-
             System.out.println("@GROUP\t" + "og"+group.getKey()+"\t"+ group.getValue());
-
             for(String gene: group.getValue()){
                 String mygene = gene.replace(".","\\.");
                 sedCommand += "s/\\<"+mygene+"\\>/og"+group.getKey()+"/g";
                 System.out.println("@MY_SED_COMMAND " + sedCommand);
                 sedCommand="";
-
             }
         }
         */
-
     }
 
 
@@ -119,9 +119,8 @@ public class Main {
         return createGroup(tuple);
     }
 
-    private static boolean validadeOptions(String[] args) throws ParseException {
-
-        //Create the options
+    private static void initializeOptions(){
+    //Create the options
         Option help = new Option("help", "print this message.");
         options.addOption(help);
         Option createGroup = new Option("group", "Create paralogy groups.");
@@ -146,9 +145,13 @@ public class Main {
                 .argName("PARALOGY_FILE")
                 .build();
         options.addOption(paralogFile);
+    }
+
+    private static boolean validadeOptions(String[] args) throws ParseException {
+
+        initializeOptions();
 
         // Parse the args
-
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
 
@@ -161,9 +164,9 @@ public class Main {
             return false;
         }
 
-        if((cmd.hasOption("group") &&
+        if(cmd.hasOption("group") &&
                 (!cmd.hasOption('p') ||
-                        cmd.getOptionValue('p') == null))){
+                        cmd.getOptionValue('p') == null)){
             System.err.println("ERROR: Paralog information file option (-p) is missing and it is necessary" +
                     " for you selected option -group.");
             return false;
@@ -190,5 +193,22 @@ public class Main {
         System.out.println("Examples:");
         System.out.println("* java -jar paralogGroupQuant.jar -group -p <PARALOGY_FILE>\n\tCreate paralogy groups.");
         System.out.println("* java -jar paralogGroupQuant.jar -sum -g <GROUP_FILE> -c <COUNT_FILE>\n\tReplace the gene ids by group ids; sum up the counts per group.");
+    }
+
+
+    private static boolean isGroup(){
+        return options.hasLongOption("group");
+    }
+
+    private static boolean isSum(){
+        return options.hasLongOption("sum");
+    }
+
+    private static void group(){
+
+    }
+
+    private static void sumCount(){
+
     }
 }

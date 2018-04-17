@@ -1,9 +1,8 @@
 package org.bitfun;
 
-import java.io.BufferedReader;
+import org.apache.commons.cli.*;
+
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +10,66 @@ import java.util.Map;
 
 public class Main {
 
+
+    private static Options options = new Options();
+
     private static HashMap<String, List<String>> ortologGroups = new HashMap<>();
     private static HashMap<String, List<String>> ortologFunctions = new HashMap<>();
 
-    private static int groupId = 0;
+    public static void main(String[] args) throws FileNotFoundException, ParseException {
+	// write your code here
+
+        // read line
+        // check if $1 or $2 is element of a list l1;
+        /// if yes; add $1 and $2 to
+        /// if no; create new list and add $1,$2
+
+        try {
+            if (!validadeOptions(args)) {
+                help();
+                System.exit(-1);
+            }
+        }catch(ParseException exp){
+            System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
+        }
+
+        /*
+        String filename = args[0];
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] tuple = line.split("\t");
+                addToGroup(tuple);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        */
+
+        /* It is old, but gold.
+
+        for(Map.Entry<String,List<String>> group: ortologGroups.entrySet()){
+            System.out.println("@GROUP_SIZE\t" + "og"+group.getValue().size());
+
+            String sedCommand="";
+
+            System.out.println("@FUNCTION\t" + "og"+group.getKey()+"\t"+ ortologFunctions.get(group.getKey()));
+
+            System.out.println("@GROUP\t" + "og"+group.getKey()+"\t"+ group.getValue());
+
+            for(String gene: group.getValue()){
+                String mygene = gene.replace(".","\\.");
+                sedCommand += "s/\\<"+mygene+"\\>/og"+group.getKey()+"/g";
+                System.out.println("@MY_SED_COMMAND " + sedCommand);
+                sedCommand="";
+
+            }
+        }
+        */
+
+    }
+
 
     private static boolean createGroup(String[] tuple){
 
@@ -64,43 +119,76 @@ public class Main {
         return createGroup(tuple);
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-	// write your code here
+    public static boolean validadeOptions(String [] args) throws ParseException {
 
-        // read line
-        // check if $1 or $2 is element of a list l1;
-        /// if yes; add $1 and $2 to
-        /// if no; create new list and add $1,$2
+        //Create the options
+        Option help = new Option("help", "print this message.");
+        options.addOption(help);
+        Option createGroup = new Option("group", "Create paralogy groups.");
+        options.addOption(createGroup);
+        Option sum = new Option("sum", "Replace the gene ids by group ids; sum up the counts per group.");
+        options.addOption(sum);
+        Option groupFile = Option.builder("g")
+                .desc("File with the paralog group ids, function list and member genes list.")
+                .hasArg()
+                .argName("GROUP_FILE")
+                .build();
+        options.addOption(groupFile);
+        Option countFile = Option.builder("c")
+                .desc("GTF counts.")
+                .hasArg()
+                .argName("COUNT_FILE")
+                .build();
+        options.addOption(countFile);
+        Option paralogFile = Option.builder("p")
+                .desc("Three-column file: gene, it paralog and the paralog's function.")
+                .hasArg()
+                .argName("PARALOGY_FILE")
+                .build();
+        options.addOption(paralogFile);
 
-        String filename = args[0];
+        // Parse the args
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] tuple = line.split("\t");
-                addToGroup(tuple);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
+        if(cmd.hasOption("help")){
+            return false;
         }
 
-        for(Map.Entry<String,List<String>> group: ortologGroups.entrySet()){
-            System.out.println("@GROUP_SIZE\t" + "og"+group.getValue().size());
-
-            String sedCommand="";
-
-            System.out.println("@FUNCTION\t" + "og"+group.getKey()+"\t"+ ortologFunctions.get(group.getKey()));
-
-            System.out.println("@GROUP\t" + "og"+group.getKey()+"\t"+ group.getValue());
-
-            for(String gene: group.getValue()){
-                String mygene = gene.replace(".","\\.");
-                sedCommand += "s/\\<"+mygene+"\\>/og"+group.getKey()+"/g";
-                System.out.println("@MY_SED_COMMAND " + sedCommand);
-                sedCommand="";
-
-            }
+        if(cmd.hasOption("sum") && cmd.hasOption("count")){
+            System.err.println("ERROR: You should select only one option: -sum OR -count.");
+            return false;
         }
 
+        if((cmd.hasOption("group") &&
+                (!cmd.hasOption('p') ||
+                        cmd.getOptionValue('p') == null))){
+            System.err.println("ERROR: Paralog information file option (-p) is missing and it is necessary" +
+                    " for you selected option -group.");
+            return false;
+        }
+
+        if(cmd.hasOption("sum") &&
+                (!cmd.hasOption('g') ||
+                        !cmd.hasOption('c') ||
+                        cmd.getOptionValue('g') == null ||
+                        cmd.getOptionValue('c') == null)){
+            System.err.println("POSSIBLE ERRORS:");
+            System.err.println("\t\t- Paralog group file (-g) is missing.\n" +
+                    "\t\t- GTF count file (-c) is missing.\t" +
+                    "These files are necessary for the selected option -sum.");
+            return false;
+        }
+
+        return true;
+    }
+
+    public static void help(){
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp( "paralogGroupQuant", options);
+        System.out.println("Examples:");
+        System.out.println("* java -jar paralogGroupQuant.jar -group -p <PARALOGY_FILE>\n\tCreate paralogy groups.");
+        System.out.println("* java -jar paralogGroupQuant.jar -sum -g <GROUP_FILE> -c <COUNT_FILE>\n\tReplace the gene ids by group ids; sum up the counts per group.");
     }
 }

@@ -119,7 +119,7 @@ public class Main {
         return createGroup(tuple);
     }
 
-    public static boolean validadeOptions(String [] args) throws ParseException {
+    private static boolean validadeOptions(String[] args) throws ParseException {
 
         //Create the options
         Option help = new Option("help", "print this message.");

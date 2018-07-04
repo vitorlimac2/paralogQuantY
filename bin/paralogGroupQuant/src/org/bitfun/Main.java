@@ -2,7 +2,10 @@ package org.bitfun;
 
 import org.apache.commons.cli.*;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +15,8 @@ public class Main {
 
 
     private static Options options = new Options();
+
+    private static CommandLine cmd;
 
     private static HashMap<String, List<String>> ortologGroups = new HashMap<>();
     private static HashMap<String, List<String>> ortologFunctions = new HashMap<>();
@@ -119,32 +124,39 @@ public class Main {
         return createGroup(tuple);
     }
 
-    private static void initializeOptions(){
+    private static boolean initializeOptions(){
     //Create the options
         Option help = new Option("help", "print this message.");
         options.addOption(help);
-        Option createGroup = new Option("group", "Create paralogy groups.");
+
+        Option createGroup = Option.builder("group").desc("Create paralog groups.").build();
         options.addOption(createGroup);
+
         Option sum = new Option("sum", "Replace the gene ids by group ids; sum up the counts per group.");
         options.addOption(sum);
+
         Option groupFile = Option.builder("g")
                 .desc("File with the paralog group ids, function list and member genes list.")
                 .hasArg()
                 .argName("GROUP_FILE")
                 .build();
         options.addOption(groupFile);
+
         Option countFile = Option.builder("c")
                 .desc("GTF counts.")
                 .hasArg()
                 .argName("COUNT_FILE")
                 .build();
         options.addOption(countFile);
+
         Option paralogFile = Option.builder("p")
                 .desc("Three-column file: gene, it paralog and the paralog's function.")
-                .hasArg()
                 .argName("PARALOGY_FILE")
+                .hasArg()
                 .build();
         options.addOption(paralogFile);
+
+        return true;
     }
 
     private static boolean validadeOptions(String[] args) throws ParseException {
@@ -153,7 +165,12 @@ public class Main {
 
         // Parse the args
         CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse(options, args);
+        try {
+            cmd = parser.parse(options, args);
+        }
+        catch(ParseException exp){
+            System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
+        }
 
         if(cmd.hasOption("help")){
             return false;
@@ -183,7 +200,6 @@ public class Main {
                     "These files are necessary for the selected option -sum.");
             return false;
         }
-
         return true;
     }
 
@@ -197,14 +213,37 @@ public class Main {
 
 
     private static boolean isGroup(){
-        return options.hasLongOption("group");
+        return cmd.hasOption("group");
     }
 
     private static boolean isSum(){
         return options.hasLongOption("sum");
     }
 
+    private static String getParalogInfoFileName(){
+        return cmd.getOptionValue('p');
+    }
+
+    private static String getGTFcountFileName(){
+        return cmd.getOptionValue("c");
+    }
+
+    private static String getGroupsFileName(){
+        return cmd.getOptionValue("g");
+    }
+
     private static void group(){
+
+        String filename = getParalogInfoFileName();
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] tuple = line.split("\t");
+                addToGroup(tuple);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

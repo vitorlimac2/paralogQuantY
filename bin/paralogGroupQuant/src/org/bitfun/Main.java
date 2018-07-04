@@ -245,9 +245,40 @@ public class Main {
             e.printStackTrace();
         }
 
+        printGroup();
+
     }
 
     private static void sumCount(){
 
+    }
+
+    private static void printGroup(){
+        for(Map.Entry<String, List<String>> g : ortologGroups.entrySet()){
+            System.out.print("g"+g.getKey());
+            printListString(g.getValue());
+        }
+
+
+    }
+
+    private static void printListString(List<String> l){
+
+        if(l.size()==1){
+            System.out.print(l.get(0));
+            return;
+        }
+
+        String aux="";
+
+        for(String s: l){
+            if(aux.equals("")){
+                aux=s;
+            }
+            else{
+                aux=aux+","+s;
+            }
+        }
+        System.out.print("\t"+aux+"\n");
     }
 }

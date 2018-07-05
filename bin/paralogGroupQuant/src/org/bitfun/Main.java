@@ -85,8 +85,8 @@ public class Main {
         l1.add(tuple[1]);
 
         ortologGroups.put(tuple[0],l1);
-        l2.add(tuple[3]);
 
+        l2.add(tuple[3]);
         ortologFunctions.put(tuple[0],l2);
         return true;
     }
@@ -96,7 +96,6 @@ public class Main {
         if(!ortologFunctions.get(key).contains(func)){
             ortologFunctions.get(key).add(func);
         }
-
         return true;
 
     }
@@ -111,12 +110,13 @@ public class Main {
             if(group.getValue().contains(tuple[0])){ // if exists a group with id tuple[0]
                 if(!group.getValue().contains(tuple[1])){ // this group does not contains tuple[1]
                     group.getValue().add(tuple[1]);
-                    addFunction(group.getKey(),tuple[3]+" |");
+                    addFunction(group.getKey(),tuple[3]);
                     return true;
                 }
                 return false;
             }else if(group.getValue().contains(tuple[1])){
                 group.getValue().add(tuple[0]);
+                addFunction(group.getKey(),tuple[3]+" |");
                 return true;
             }
         }
@@ -254,9 +254,13 @@ public class Main {
     }
 
     private static void printGroup(){
+        int idGroup=1;
         for(Map.Entry<String, List<String>> g : ortologGroups.entrySet()){
-            System.out.print("g"+g.getKey());
+            System.out.print("gPar."+idGroup);
             printListString(g.getValue());
+            printListString(ortologFunctions.get(g.getKey()));
+            System.out.println();
+            idGroup++;
         }
 
 
@@ -265,7 +269,7 @@ public class Main {
     private static void printListString(List<String> l){
 
         if(l.size()==1){
-            System.out.print(l.get(0));
+            System.out.print("\t" + l.get(0));
             return;
         }
 
@@ -276,9 +280,9 @@ public class Main {
                 aux=s;
             }
             else{
-                aux=aux+","+s;
+                aux=aux+"|"+s;
             }
         }
-        System.out.print("\t"+aux+"\n");
+        System.out.print("\t"+aux);
     }
 }

@@ -58,7 +58,7 @@ public class Main {
 
         */
 
-        /* It is old, but gold.
+        /* It is old, but it works.
 
         for(Map.Entry<String,List<String>> group: ortologGroups.entrySet()){
             System.out.println("@GROUP_SIZE\t" + "og"+group.getValue().size());

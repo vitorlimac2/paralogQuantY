@@ -1,4 +1,3 @@
 Manifest-Version: 1.0
-Class-Path: out/production/GroupOrlogs/org/bitgun
 Main-Class: org.bitfun.Main
 

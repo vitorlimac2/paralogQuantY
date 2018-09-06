@@ -4,16 +4,19 @@ Description.
 
 ## Table of Contents
 
- * [Getting Started](#getting-started)
-    * [Genome and transcriptome information](#genome-and-transcriptome-information)
-       * [Genome Assembly](#genome-assembly)
-       * [Transcriptome annotation](#transcriptome-annotation)
-       * [Paralogy information](#paralogy-information)
-    * [Mapping and quantification](#mapping-and-quantification)
-    * [Visualization, normalization and differential gene expression](#visualization-normalization-and-differential-gene-expression)
- * [Authors](#authors)
- * [References](#references)
- * [Links](#links)
+
+   * [Getting Started](#getting-started)
+      * [Genome and transcriptome information](#genome-and-transcriptome-information)
+         * [Genome Assembly](#genome-assembly)
+         * [Transcriptome annotation](#transcriptome-annotation)
+         * [Paralogy information](#paralogy-information)
+      * [Mapping](#mapping)
+      * [Quantification of paralog groups](#quantification-of-paralog-groups)
+      * [Visualization, normalization and differential gene expression](#visualization-normalization-and-differential-gene-expression)
+      * [Transcriptome assembly](#transcriptome-assembly)
+   * [Authors](#authors)
+   * [References](#references)
+   * [Links](#links)
 
 ## Getting Started
 
@@ -89,8 +92,3 @@ For more details, scripts and command-lines, see [bin](https://github.com/vitorl
 * Dobin, A., Davis C.A., Schlesinger, F., Drenkow, J., Zaleski, C., Jha, S., Batut, P., Chaisson, M., Gingeras, T.R.. STAR: ultrafast universal RNA-seq aligner. Bioinformatics. 2013 Jan 1;29(1):15-21.
 * Love, M. I., Huber, W. and Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15, pp. 550 (2014).
 * Santiago, M. S., Sammeth, M., Guigó, R., Ribeca, P. The GEM mapper: fast, accurate and versatile alignment by filtration. Nature Methods 9, 1185–1188 (2012)
-
-## Links
-
-
-* [BitFun Lab](https://bitfun.org)

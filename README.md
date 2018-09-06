@@ -55,8 +55,16 @@ Next, the actual mapping can be done with the command-line:
 ~$ STAR --runMode alignReads --seedSearchStartLmaxOverLread 0.5 --outSAMattributes NH --outSAMtype BAM SortedByCoordinate --winAnchorMultimapNmax 50 --outFilterMismatchNoverReadLmax 0.1 --limitOutSAMoneReadBytes 25000 --outSAMunmapped Within --outSAMprimaryFlag AllBestScore --outFilterMultimapNmax 50 --runThreadN 20 --genomeDir /data/genomes/T.cruzi/tryCruBrener/triTrypDB-28_2014-09-16/star/ --readFilesIn Lib-1_R1.fq Lib-1_R2.fq --outFileNamePrefix Lib1
 ```
 
-### Quantification
+### Quantification of paralog groups
+This step consists of ...
 
+```
+~$ featureCounts -B -p -O -M --fraction -R -T 30 -a /data/genomes/T.cruzi/tryCruBrener/triTrypDB-28_2014-09-16/tcruzi_complete.gtf -o all.out Lib1.out.bam
+```
+Using the program ..., 
+
+
+Finally, we have ...
 
 
 For more details, scripts and command-lines, see [bin](https://github.com/vitorlimac2/paralogQuantY/tree/master/bin) folder.
@@ -66,6 +74,8 @@ For more details, scripts and command-lines, see [bin](https://github.com/vitorl
 Differential expression analysis was performed similarly to the literature (Anders et al, 2013) using the R/Bioconductor package DESeq2 (Love et al, 2014). Genes/OG with < 1 count were filtered out of the raw count table. Next, fractional counts were rounded by the R function “round” since DESeq2 handles only integer counts. Genes/groups were considered differentially expressed when they had a log2 fold-change greater or equals to ±1.5 and False Discovery Rate (FDR) was less or equals to 0.05.
 
 For more details, scripts and command-lines, see [bin](https://github.com/vitorlimac2/paralogQuantY/tree/master/bin) folder.
+
+### Transcriptome assembly
 
 ## Authors
 

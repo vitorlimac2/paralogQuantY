@@ -42,16 +42,22 @@ TriTrypDB (Aslett et al, 2010) provides plain text files containing orthology in
 * [T. cruzi strain CL Brener Esmeraldo-like \<TXT\>](http://tritrypdb.org/common/downloads/release-28/TcruziCLBrenerEsmeraldo-like/txt/TriTrypDB-28_TcruziCLBrenerEsmeraldo-likeGene.txt) (TriTrypDB 28)
 * [T. cruzi strain CL Brener Non-Esmeraldo-like \<TXT\>](http://tritrypdb.org/common/downloads/release-28/TcruziCLBrenerNon-Esmeraldo-like/txt/TriTrypDB-28_TcruziCLBrenerNon-Esmeraldo-likeGene.txt) (TriTrypDB 28)
 
-### Mapping and quantification
+### Mapping
 
-Mapping and quantification were performed by the pipeline of [GEMTools library](http://gemtools.github.io/). GEMTools is a wrapper for the GEM-mapper (Santiago et al, 2012) that simplifies the manipulation of the mapper functionalities. Example of the command-line for gemtools RNA pipeline:
+Genomic mapping was performed by the read aligner STAR (Spliced Transcripts Alignment to a Reference) (Dobin et al, 2013). First, STAR indexes the FASTA formatted file of the reference genome. In our case, we indexed the three haplotype assemblies T. cruzi strain CL Brener, CL Brener Esmeraldo-like and CL Brener Non-Esmeraldo-like. Indexing can be done with command:
+
 ```
-gemtools rna-pipeline --stats-json -i genome.gem -a transcriptome.gtf -f Reads_R1.fq Reads_R2_.fq -t 20 -q 33 --compress-all --no-bam
+~$ STAR --runThreadN 20 --runMode genomeGenerate --genomeChrBinNbits 11 --genomeSAindexNbases 12 --genomeDir . --genomeFastaFiles tcruzi_complete.fa --sjdbGTFfile tcruzi_complete.gtf --sjdbGTFtagExonParentTranscript gene_id
 ```
-This command-line performs:
-* Mapping to genome and transcriptome indexes
-* Filter mappings
-* Assign reads to the transcriptome and create GTF counts
+Next, the actual mapping can be done with the command-line:
+
+```
+~$ STAR --runMode alignReads --seedSearchStartLmaxOverLread 0.5 --outSAMattributes NH --outSAMtype BAM SortedByCoordinate --winAnchorMultimapNmax 50 --outFilterMismatchNoverReadLmax 0.1 --limitOutSAMoneReadBytes 25000 --outSAMunmapped Within --outSAMprimaryFlag AllBestScore --outFilterMultimapNmax 50 --runThreadN 20 --genomeDir /data/genomes/T.cruzi/tryCruBrener/triTrypDB-28_2014-09-16/star/ --readFilesIn Lib-1_R1.fq Lib-1_R2.fq --outFileNamePrefix Lib1
+```
+
+### Quantification
+
+
 
 For more details, scripts and command-lines, see [bin](https://github.com/vitorlimac2/paralogQuantY/tree/master/bin) folder.
 
@@ -70,6 +76,7 @@ For more details, scripts and command-lines, see [bin](https://github.com/vitorl
 * Anders, S. et al. Count-based differential expression analysis of RNA sequencing data using R and Bioconductor. Nature Protocols 8, 1765–1786 (2013).
 * Aslett, M. et al. TriTrypDB: a functional genomic resource for the Trypanosomatidae. Nucleic Acids Research 2010 38(Database issue):D457-D462;
 * Chen, F., Mackey, A. J., Stoeckert, C. J. Jr., Roos D. S. OrthoMCL-DB: querying a comprehensive multi-species collection of ortholog groups. Nucleic Acids Res. 2006 Jan 1;34(Database issue):D363-8.
+* Dobin, A., Davis C.A., Schlesinger, F., Drenkow, J., Zaleski, C., Jha, S., Batut, P., Chaisson, M., Gingeras, T.R.. STAR: ultrafast universal RNA-seq aligner. Bioinformatics. 2013 Jan 1;29(1):15-21.
 * Love, M. I., Huber, W. and Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15, pp. 550 (2014).
 * Santiago, M. S., Sammeth, M., Guigó, R., Ribeca, P. The GEM mapper: fast, accurate and versatile alignment by filtration. Nature Methods 9, 1185–1188 (2012)
 

@@ -23,11 +23,24 @@ We use [awk](https://en.wikipedia.org/wiki/AWK) to extract and filter the gene p
 **Input:**
 
 * [Tcruzi_CLBrener_Paralogy_TriTrypDB28](https://github.com/vitorlimac2/paralogQuantY/tree/master/metafiles);
+### Input Example:
+```
+TcCLB.397937.10	TcCLB.508625.160	Trypanosoma cruzi CL Brener Non-Esmeraldo-like	pumilio/PUF RNA binding protein 1, putative (PUF1)	yes
+TcCLB.398343.9	TcCLB.503479.60	Trypanosoma cruzi CL Brener Esmeraldo-like	surface protease GP63, putative	no
+TcCLB.398343.9	TcCLB.503783.50	Trypanosoma cruzi CL Brener Esmeraldo-like	surface protease GP63 (pseudogene), putative	no
+TcCLB.398343.9	TcCLB.504039.250	Trypanosoma cruzi CL Brener Esmeraldo-like	surface protease GP63 (pseudogene), putative	no
+...
+```
 
 **Output:**
 
 * Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups: File with the paralog group ids, function list and member genes list;
+### Output Example:
+```
+gPar.1	TcCLB.397937.10|TcCLB.508625.160	pumilio/PUF RNA binding protein 1, putative (PUF1)
+gPar.2	TcCLB.398343.9|TcCLB.503479.60|TcCLB.503783.50|TcCLB.504039.250|...	surface protease GP63, putative|surface protease GP63 (pseudogene), putative|surface protease GP63, putative (fragment)
 
+```
 **Command-line:**
 ```
 ~$ java -jar paralogGroupQuant.jar -group -p Tcruzi_CLBrener_Paralogy_TriTrypDB28 > Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups

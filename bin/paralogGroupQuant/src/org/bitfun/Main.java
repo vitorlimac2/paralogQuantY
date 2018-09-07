@@ -2,14 +2,8 @@ package org.bitfun;
 
 import org.apache.commons.cli.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
@@ -21,21 +15,21 @@ public class Main {
     private static HashMap<String, List<String>> ortologGroups = new HashMap<>();
     private static HashMap<String, List<String>> ortologFunctions = new HashMap<>();
 
-    public static void main(String[] args) throws FileNotFoundException, ParseException {
-	// write your code here
+    private static Map<String, String> groupHash;
 
-        try {
-            if (!validadeOptions(args)) {
-                help();
-                System.exit(-1);
-            }
-        }catch(ParseException exp){
-            System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
+    private static Map<String, FeatureCount> countHash;
+
+    public static void main(String[] args) {
+        // write your code here
+
+        if (!validadeOptions(args)) {
+            help();
+            System.exit(-1);
         }
 
-        if(isGroup()){
+        if (isGroup()) {
             group();
-        }else if(isSum()){
+        } else if (isSum()) {
             sumCount();
         }
 
@@ -76,7 +70,7 @@ public class Main {
     }
 
 
-    private static boolean createGroup(String[] tuple){
+    private static void createGroup(String[] tuple) {
 
         List<String> l1 = new ArrayList<>();
         List<String> l2 = new ArrayList<>();
@@ -84,48 +78,46 @@ public class Main {
         l1.add(tuple[0]);
         l1.add(tuple[1]);
 
-        ortologGroups.put(tuple[0],l1);
+        ortologGroups.put(tuple[0], l1);
 
         l2.add(tuple[3]);
-        ortologFunctions.put(tuple[0],l2);
-        return true;
+        ortologFunctions.put(tuple[0], l2);
     }
 
-    private static boolean addFunction(String key, String func){
+    private static void addFunction(String key, String func) {
 
-        if(!ortologFunctions.get(key).contains(func)){
+        if (!ortologFunctions.get(key).contains(func)) {
             ortologFunctions.get(key).add(func);
         }
-        return true;
 
     }
 
-    private static boolean addToGroup(String[] tuple){
-        if(ortologGroups.size()==0){
+    private static void addToGroup(String[] tuple) {
+        if (ortologGroups.size() == 0) {
             createGroup(tuple);
-            return true;
+            return;
         }
 
-        for(Map.Entry<String,List<String>> group: ortologGroups.entrySet()){
-            if(group.getValue().contains(tuple[0])){ // if exists a group with id tuple[0]
-                if(!group.getValue().contains(tuple[1])){ // this group does not contains tuple[1]
+        for (Map.Entry<String, List<String>> group : ortologGroups.entrySet()) {
+            if (group.getValue().contains(tuple[0])) { // if exists a group with id tuple[0]
+                if (!group.getValue().contains(tuple[1])) { // this group does not contains tuple[1]
                     group.getValue().add(tuple[1]);
-                    addFunction(group.getKey(),tuple[3]);
-                    return true;
+                    addFunction(group.getKey(), tuple[3]);
+                    return;
                 }
-                return false;
-            }else if(group.getValue().contains(tuple[1])){
+                return;
+            } else if (group.getValue().contains(tuple[1])) {
                 group.getValue().add(tuple[0]);
-                addFunction(group.getKey(),tuple[3]+" |");
-                return true;
+                addFunction(group.getKey(), tuple[3] + " |");
+                return;
             }
         }
 
-        return createGroup(tuple);
+        createGroup(tuple);
     }
 
-    private static boolean initializeOptions(){
-    //Create the options
+    private static void initializeOptions() {
+        //Create the options
         Option help = new Option("help", "print this message.");
         options.addOption(help);
 
@@ -156,10 +148,9 @@ public class Main {
                 .build();
         options.addOption(paralogFile);
 
-        return true;
     }
 
-    private static boolean validadeOptions(String[] args) throws ParseException {
+    private static boolean validadeOptions(String[] args) {
 
         initializeOptions();
 
@@ -167,33 +158,32 @@ public class Main {
         CommandLineParser parser = new DefaultParser();
         try {
             cmd = parser.parse(options, args);
-        }
-        catch(ParseException exp){
-            System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
+        } catch (ParseException exp) {
+            System.err.println("Parsing failed.  Reason: " + exp.getMessage());
         }
 
-        if(cmd.hasOption("help")){
+        if (cmd.hasOption("help")) {
             return false;
         }
 
-        if(cmd.hasOption("sum") && cmd.hasOption("count")){
+        if (cmd.hasOption("sum") && cmd.hasOption("count")) {
             System.err.println("ERROR: You should select only one option: -sum OR -count.");
             return false;
         }
 
-        if(cmd.hasOption("group") &&
+        if (cmd.hasOption("group") &&
                 (!cmd.hasOption('p') ||
-                        cmd.getOptionValue('p') == null)){
+                        cmd.getOptionValue('p') == null)) {
             System.err.println("ERROR: Paralog information file option (-p) is missing and it is necessary" +
                     " for you selected option -group.");
             return false;
         }
 
-        if(cmd.hasOption("sum") &&
+        if (cmd.hasOption("sum") &&
                 (!cmd.hasOption('g') ||
                         !cmd.hasOption('c') ||
                         cmd.getOptionValue('g') == null ||
-                        cmd.getOptionValue('c') == null)){
+                        cmd.getOptionValue('c') == null)) {
             System.err.println("POSSIBLE ERRORS:");
             System.err.println("\t\t- Paralog group file (-g) is missing.\n" +
                     "\t\t- GTF count file (-c) is missing.\t" +
@@ -203,36 +193,35 @@ public class Main {
         return true;
     }
 
-    public static void help(){
+    public static void help() {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp( "paralogGroupQuant", options);
+        formatter.printHelp("paralogGroupQuant", options);
         System.out.println("Examples:");
         System.out.println("* java -jar paralogGroupQuant.jar -group -p <PARALOGY_FILE>\n\tCreate paralogy groups.");
         System.out.println("* java -jar paralogGroupQuant.jar -sum -g <GROUP_FILE> -c <COUNT_FILE>\n\tReplace the gene ids by group ids; sum up the counts per group.");
     }
 
-
-    private static boolean isGroup(){
+    private static boolean isGroup() {
         return cmd.hasOption("group");
     }
 
-    private static boolean isSum(){
-        return options.hasLongOption("sum");
+    private static boolean isSum() {
+        return cmd.hasOption("sum");
     }
 
-    private static String getParalogInfoFileName(){
+    private static String getParalogInfoFileName() {
         return cmd.getOptionValue('p');
     }
 
-    private static String getGTFcountFileName(){
+    private static String getGTFcountFileName() {
         return cmd.getOptionValue("c");
     }
 
-    private static String getGroupsFileName(){
+    private static String getGroupsFileName() {
         return cmd.getOptionValue("g");
     }
 
-    private static void group(){
+    private static void group() {
 
         String filename = getParalogInfoFileName();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -249,14 +238,35 @@ public class Main {
 
     }
 
-    private static void sumCount(){
+    private static void sumCount() {
+
+        try {
+            parseGroupFile();
+            parseCount();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        printGroupCount();
 
     }
 
-    private static void printGroup(){
-        int idGroup=1;
-        for(Map.Entry<String, List<String>> g : ortologGroups.entrySet()){
-            System.out.print("gPar."+idGroup);
+    private static void printGroupCount() {
+
+
+        for(Map.Entry<String, FeatureCount> entry: countHash.entrySet()){
+
+            System.out.println(entry.getKey() + "\t" + entry.getValue().getGeneListToString() + "\t" + entry.getValue().getCountListToString());
+
+        }
+
+
+    }
+
+    private static void printGroup() {
+        int idGroup = 1;
+        for (Map.Entry<String, List<String>> g : ortologGroups.entrySet()) {
+            System.out.print("gPar." + idGroup);
             printListString(g.getValue());
             printListString(ortologFunctions.get(g.getKey()));
             System.out.println();
@@ -266,23 +276,97 @@ public class Main {
 
     }
 
-    private static void printListString(List<String> l){
+    private static void printListString(List<String> l) {
 
-        if(l.size()==1){
+        if (l.size() == 1) {
             System.out.print("\t" + l.get(0));
             return;
         }
 
-        String aux="";
+        StringBuilder aux = new StringBuilder();
 
-        for(String s: l){
-            if(aux.equals("")){
-                aux=s;
-            }
-            else{
-                aux=aux+"|"+s;
+        for (String s : l) {
+            if (aux.toString().equals("")) {
+                aux = new StringBuilder(s);
+            } else {
+                aux.append("|").append(s);
             }
         }
-        System.out.print("\t"+aux);
+        System.out.print("\t" + aux);
+    }
+
+    private static void parseGroupFile() throws FileNotFoundException {
+        groupHash = new HashMap<>();
+        try (Scanner scanner = new Scanner(new File(getGroupsFileName()))) {
+            scanner.useDelimiter(System.getProperty("line.separator"));
+            while (scanner.hasNext()) {
+                String s = scanner.next();
+                String [] line = s.split("\\t");
+                String group = line[0];
+                String geneIdsSepByPipe = line[1];
+                String[] geneIds = geneIdsSepByPipe.split("\\|");
+                for (String gene : geneIds)
+                groupHash.put(gene, group);
+            }
+        }
+    }
+
+    private static void parseCount() throws FileNotFoundException {
+
+        countHash = new HashMap<>();
+
+        try (Scanner scanner = new Scanner(new File(getGTFcountFileName()))) {
+            scanner.useDelimiter(System.getProperty("line.separator"));
+            while (scanner.hasNext()) {
+                String[] line = scanner.next().split("\\t");
+                String gene = line[0];
+                float[] countList = convertStringArrayToFloat(Arrays.copyOfRange(line, 1, line.length));
+
+                String group;
+                if(groupHash.containsKey(gene)) { // gene is contained in some group
+                    group = groupHash.get(gene);
+
+                    if(countHash.containsKey(group)){ // this group is already added in the hash
+                        updateFeature(group, gene,countList);
+
+                    }else{ // this group is not added in the hash.
+                        createNewFeature(group, gene, countList);
+                    }
+
+                }else{ // gene has no group
+                    createNewFeature(gene,countList);
+                }
+            }
+        }
+
+    }
+
+    private static void createNewFeature(String id, float[] counts){
+        createNewFeature(id, id, counts);
+    }
+
+    private static void createNewFeature(String id, String gene, float[] counts){
+        FeatureCount f = new FeatureCount();
+        f.setGroupId(id);
+        List<String> l = new ArrayList<>();
+        l.add(gene);
+        f.setGeneList(l);
+        f.setCounts(counts);
+        countHash.put(id, f);
+    }
+
+    private static void updateFeature(String group, String gene, float[] counts){
+        for(int i = 0; i < counts.length; i++){
+            countHash.get(group).updateCounts(i,counts[i]);
+        }
+        countHash.get(group).updateGeneList(gene);
+    }
+
+    private static float[] convertStringArrayToFloat(String[] slist){
+        float[] flist = new float[slist.length];
+        for (int i = 0; i < slist.length;i++){
+            flist[i] = Float.valueOf(slist[i]);
+        }
+        return flist;
     }
 }

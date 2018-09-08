@@ -51,14 +51,14 @@ gPar.2	TcCLB.398343.9|TcCLB.503479.60|TcCLB.503783.50|TcCLB.504039.250|...	surfa
 **Input:**
 
 * Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups: File with the paralog group ids and list of group member genes;
-* \*.filtered.gtf.counts.txt: GTF weighted counts created by gemtools;
+* all_counts_joined.txt: replicate counts.
 
 **Output:**
 
-* Lib1.filtered.gtf.counts.WithParG.txt: tab-separated GTF weighted count file with the paralog group (PG) ID, list of counted genes (comma-separated) and sum the counts of the same PG. Genes that have not been assigned to any group do not have their counts changed;
+* group_count.txt: tab-separated GTF weighted count file with the paralog group (PG) ID, list of counted genes (pipe-separated) and sum the counts of the same PG. Genes that have not been assigned to any group do not have their counts changed;
 
 **Command-line**
 ```
-~$ java -jar paralogGroupQuant.jar -sum -g Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups -c Lib1.filtered.gtf.counts.txt > Lib1.filtered.gtf.counts.WithParG.txt
+~$ java -jar paralogGroupQuant.jar -sum -g ../../paralogy/Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups -c all_counts_joined.txt | sort -k1,1 > group_count.txt
 ```
 

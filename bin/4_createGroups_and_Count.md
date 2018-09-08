@@ -61,4 +61,15 @@ gPar.2	TcCLB.398343.9|TcCLB.503479.60|TcCLB.503783.50|TcCLB.504039.250|...	surfa
 ```
 ~$ java -jar paralogGroupQuant.jar -sum -g ../../paralogy/Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups -c all_counts_joined.txt | sort -k1,1 > group_count.txt
 ```
-
+***Output (group_count.txt):***
+```
+...
+gPar.1610       TcCLB.508601.30|TcCLB.511801.44 637.0   333.0   725.0   524.0   830.0   989.0
+gPar.1611       TcCLB.508413.50|TcCLB.510755.120        2569.0  1023.0  2894.0  2702.0  4056.0  4806.0
+gPar.1612       TcCLB.419833.10|TcCLB.503727.29|TcCLB.506401.70|TcCLB.509603.10 1043.0  331.0   1760.0  1350.0  2347.0  2538.0
+...
+TcCLB.503457.4  TcCLB.503457.4  338.5   222.0   264.167 158.5   293.167 394.333
+TcCLB.503459.29 TcCLB.503459.29 87.0    48.0    65.0    47.0    87.0    127.0
+TcCLB.503461.40 TcCLB.503461.40 1.0     0.0     0.0     0.0     1.0     1.0
+...
+```

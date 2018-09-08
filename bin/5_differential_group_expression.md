@@ -1,4 +1,4 @@
-*Analysis of Differential Group Expression*
+# Analysis of Differential Group Expression
 
 
 **Input:**

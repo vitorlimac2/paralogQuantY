@@ -26,4 +26,7 @@ for file in *.Unique.Sorted; do cat $file | awk -v OFS="\t" '{reads_mm[$1]+=1; r
 for file in *.Unique.Sorted.ReadAssignmentToGene; do cat $file | awk '$3!=0{gene_count[$2] = gene_count[$2]+1/$3} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > $file.NoNormalized.Frac; done
 ```
 
-Next step is 
+Next step is unir todos os arquivos com counts das bibliotecas em um único arquivo. Este arquivo será usado como input para o programa JAVA denominado paralogGroupQuant para somar os counts de genes que pertecem aos mesmos grupos de genes paralogos.
+```
+firstOutput='0,1.2';secondOutput='2.2'; myoutput="$firstOutput,$secondOutput";outputCount=3;join -a 1 -a 2 -e 0 -o "$myoutput" Epi1Aligned.sortedByCoord.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene.NoNormalized.Frac Epi2Aligned.sortedByCoord.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene.NoNormalized.Frac > tmp.tmp; for f in Epi3Aligned.sortedByCoord.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene.NoNormalized.Frac Trypo1Aligned.sortedByCoord.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene.NoNormalized.Frac Trypo2Aligned.sortedByCoord.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene.NoNormalized.Frac Trypo3Aligned.sortedByCoord.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene.NoNormalized.Frac; do firstOutput="$firstOutput,1.$outputCount"; myoutput="$firstOutput,$secondOutput"; join -a 1 -a 2 -e 0 -o "$myoutput" tmp.tmp $f > tempf; mv tempf tmp.tmp; outputCount=$(($outputCount+1)); done; mv tmp.tmp all_counts_joined.txt
+```

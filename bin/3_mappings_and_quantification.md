@@ -18,6 +18,7 @@
 featureCounts -B -p -O -M --fraction -R -T 30 -a /storage/data/genomes/T.cruzi/tryCruBrener/triTrypDB-28_2014-09-16/tcruzi_complete.gtf -o all.out Epi1Aligned.sortedByCoord.out.bam Epi2Aligned.sortedByCoord.out.bam Epi3Aligned.sortedByCoord.out.bam Trypo1Aligned.sortedByCoord.out.bam Trypo2Aligned.sortedByCoord.out.bam Trypo3Aligned.sortedByCoord.out.bam
 ```
 # Post-processing feature assignment 
+Script PostProcessing_Counts.sh:
 ```
 for file in *.out.bam.featureCounts; do cat $file | awk -v OFS="\t" -v COL_READ=1 -v COL_GENES=3 -v COL_STATUS=2 '{if($COL_STATUS=="Assigned"){if(gene_list[$COL_READ]=="NA" || gene_list[$COL_READ]==""){gene_list[$COL_READ]=$COL_GENES;}else{gene_list[$COL_READ]=gene_list[$COL_READ]","$COL_GENES;}}else{if(gene_list[$COL_READ]==""){gene_list[$COL_READ]="NA";}}} END {for(i in gene_list){n=split(gene_list[i],l,",");for(j in l){print i, l[j];}}}' | sort | uniq | sort -k1,1 > $file.Unique.Sorted; done
 

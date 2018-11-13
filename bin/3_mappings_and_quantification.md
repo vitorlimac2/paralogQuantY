@@ -50,5 +50,5 @@ java -jar ~/Git/paralogQuantY/bin/paralogGroupQuant/out/artifacts/paralogGroupQu
 
 
 ## Merge the files and fill missing values
-join -a1 -a2 -e '0' -o '0,1.2,2.2,1.3,1.4,1.5,2.3,2.4,2.5' Epi_group_count.txt Trypo_group_count.txt | sort -k3,3 | awk '{if($2==0){$2="No_Gene_Counts"}else if($3==0){$3="No_Gene_Counts"}print}' > individual_group_count.txt
+join -a1 -a2 -e '0' -o '0,1.2,2.2,1.3,1.4,1.5,2.3,2.4,2.5' Epi_group_count.txt Trypo_group_count.txt | awk '{if($2==0){$2="No_Gene_Counts"}else if($3==0){$3="No_Gene_Counts"}print}' | sort -k1,1 > individual_group_count.txt
 ```

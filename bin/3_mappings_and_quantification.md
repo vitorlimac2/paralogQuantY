@@ -29,3 +29,26 @@ firstOutput='0,1.2';secondOutput='2.2'; myoutput="$firstOutput,$secondOutput";ou
 ```
 
 File all_counts_joined.txt is used as input for the JAVA program named paralogGroupQuant to sum-up the counts of genes from the same paralog group.
+
+***Extras ***
+
+Obtain the detected gene count for each condition:
+
+```
+## Create individual count files
+
+firstOutput='0,1.2';secondOutput='2.2'; myoutput="$firstOutput,$secondOutput";outputCount=3;join -a 1 -a 2 -e 0 -o "$myoutput" Epi1.counts Epi2.counts > tmp.tmp; for f in Epi3.counts; do firstOutput="$firstOutput,1.$outputCount"; myoutput="$firstOutput,$secondOutput"; join -a 1 -a 2 -e 0 -o "$myoutput" tmp.tmp $f > tempf; mv tempf tmp.tmp; outputCount=$(($outputCount+1)); done; sed 's/ /\t/g' tmp.tmp > Epi_counts_joined.txt; rm tmp.tmp
+
+firstOutput='0,1.2';secondOutput='2.2'; myoutput="$firstOutput,$secondOutput";outputCount=3;join -a 1 -a 2 -e 0 -o "$myoutput" Trypo1.counts Trypo2.counts > tmp.tmp; for f in Trypo3.counts; do firstOutput="$firstOutput,1.$outputCount"; myoutput="$firstOutput,$secondOutput"; join -a 1 -a 2 -e 0 -o "$myoutput" tmp.tmp $f > tempf; mv tempf tmp.tmp; outputCount=$(($outputCount+1)); done; sed 's/ /\t/g' tmp.tmp > Trypo_counts_joined.txt; rm tmp.tmp
+
+
+##Next, use paralogQuant.jar for each joined files
+
+java -jar ~/Git/paralogQuantY/bin/paralogGroupQuant/out/artifacts/paralogGroupQuant_jar/paralogGroupQuant.jar -sum -g Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups -c Epi_counts_joined.txt | sort -k1,1 > Epi_group_count.txt
+
+java -jar ~/Git/paralogQuantY/bin/paralogGroupQuant/out/artifacts/paralogGroupQuant_jar/paralogGroupQuant.jar -sum -g Tcruzi_CLBrener_Paralogy_TriTrypDB28_groups -c Trypo_counts_joined.txt | sort -k1,1 > Trypo_group_count.txt
+
+
+## Merge the files and fill missing values
+join -a1 -a2 -e '0' -o '0,1.2,2.2,1.3,1.4,1.5,2.3,2.4,2.5' Epi_group_count.txt Trypo_group_count.txt | sort -k3,3 | awk '{if($2==0){$2="No_Gene_Counts"}else if($3==0){$3="No_Gene_Counts"}print}' > individual_group_count.txt
+```
